@@ -1,0 +1,50 @@
+cabal-version: 2.4
+name: cauldron
+version: 0.1.0.0
+-- synopsis:
+-- description:
+-- bug-reports:
+-- license:
+license-file:        LICENSE
+author:              Andrew Martin
+maintainer:          andrew.thaddeus@gmail.com
+-- copyright:
+-- category:
+build-type:          Simple
+extra-source-files:  CHANGELOG.md
+
+library
+  exposed-modules:
+    Cauldron
+    Cauldron.Unsafe
+  build-depends:
+    , base >=4.12 && <5
+    , bytebuild
+    , byteslice
+    , bytesmith
+    , contiguous
+    , json-syntax
+    , lz4-bytes
+    , natural-arithmetic
+    , primitive
+    , text-short
+    , wide-word
+  hs-source-dirs: src
+  ghc-options: -Wall
+  default-language: Haskell2010
+
+test-suite test
+  type: exitcode-stdio-1.0
+  hs-source-dirs: test
+  main-is: Main.hs
+  build-depends:
+    , base
+    , cauldron
+    , byteslice
+    , bytebuild
+    , bytesmith
+    , primitive
+    , contiguous
+    , json-syntax
+  ghc-options: -Wall -O2
+  default-language: Haskell2010
