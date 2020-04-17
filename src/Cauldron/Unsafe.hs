@@ -55,8 +55,13 @@ data Units = Units
     -- the normal presentation of JSON. Lazy.
   , compressed :: {-# UNPACK #-} !Bytes
     -- ^ Compressed messages.
+  , decompressedSize :: !Int
+    -- ^ Size of concatenated messages after decompression. 
   , header :: !Int
     -- ^ Length of header. Often zero.
+  , offsets :: !(PrimArray Word32)
+    -- ^ Offsets of decompressed messages. Must be in bounds.
+    -- Represented as 32-bit words to save a little space.
   , sizes :: !(PrimArray Word32)
     -- ^ Lengths of decompressed messages. Must be in bounds.
     -- Represented as 32-bit words to save a little space.

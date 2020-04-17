@@ -17,6 +17,7 @@ library
   exposed-modules:
     Cauldron
     Cauldron.Unsafe
+    Cauldron.Units
   build-depends:
     , base >=4.12 && <5
     , bytebuild
