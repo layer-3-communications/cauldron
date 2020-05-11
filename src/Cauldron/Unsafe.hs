@@ -36,6 +36,9 @@ data Metadata = Metadata
     -- ^ Numeric identifier of customer
   , schema :: !Word64
     -- ^ Numeric schema identifier, helps parse data
+  , origin :: {-# UNPACK #-} !Word128
+    -- ^ What IPv6 address sent this batch of logs? Use zero
+    -- if this field is not applicable.
   , uuid :: {-# UNPACK #-} !Word128
     -- ^ UUID of batch. Common interpretation is that records in
     -- batch have ascending UUIDs starting at this one. 

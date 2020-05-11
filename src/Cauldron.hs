@@ -178,11 +178,12 @@ foldlrPrimArray g f !c0 z !ary = go 0 c0 where
       f c x (go (i+1) (g c x))
 
 encodeMetadata :: Metadata -> Builder
-encodeMetadata Metadata{customer,schema,uuid,timestamps} =
+encodeMetadata Metadata{customer,schema,origin,uuid,timestamps} =
   Builder.fromBounded Nat.constant
     ( BB.wordLEB128 (fromIntegral @Int @Word (PM.sizeofPrimArray timestamps)) `BB.append`
       BB.word64LEB128 customer `BB.append`
       BB.word64LEB128 schema `BB.append`
+      BB.word128BE origin `BB.append`
       BB.word128BE uuid
     )
   <> 
@@ -214,9 +215,10 @@ parser = do
   n <- fmap (fromIntegral @Word32 @Int) (Leb128.word32 ())
   customer <- Leb128.word64 ()
   schema <- Leb128.word64 ()
+  origin <- BE.word128 ()
   uuid <- BE.word128 ()
   timestamps <- takeLebI64Deltas n
-  let metadata = Metadata{customer,schema,uuid,timestamps}
+  let metadata = Metadata{customer,schema,origin,uuid,timestamps}
   units <- Units.parser () n
   pure Cauldron{metadata,units}
 
