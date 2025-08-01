@@ -133,10 +133,13 @@ parser e !n = do
       Lz4 -> 
         let ~(presentations,messages) = case Lz4.decompressU decompressedSize compressed of
               Nothing -> (C.replicate n Bytes.empty, Garbage n)
-              Just decompressed -> let slices = multisliceOffsets decompressed 0 offsets sizes in
-                case traverse Json.decode slices of
-                  Left _ -> (slices, Garbage n)
-                  Right r -> (slices, Json r)
+              Just decompressed ->
+                let slices = multisliceOffsets decompressed 0 offsets sizes
+                 in ( slices
+                    , case traverse Json.decode slices of
+                        Left _ -> Garbage n
+                        Right r -> Json r
+                    )
             units = Units{compression,format,compressed,sizes,header,messages,presentations,decompressedSize,offsets}
          in pure units
     _ -> Parser.fail e
